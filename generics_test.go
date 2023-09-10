@@ -23,7 +23,7 @@ func TestFilter(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			it := iter.FromSlice(tt.input)
-			filtered := iter.Filter(tt.fn, it)
+			filtered := iter.Filter(it, tt.fn)
 			result := iter.Slice(filtered)
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("Expected %+v, got %+v", tt.expected, result)
@@ -46,7 +46,7 @@ func TestMap(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			it := iter.FromSlice(tt.input)
-			mapped := iter.Map(tt.fn, it)
+			mapped := iter.Map(it, tt.fn)
 			result := iter.Slice(mapped)
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("Expected %v, got %v", tt.expected, result)

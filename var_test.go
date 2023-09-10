@@ -92,7 +92,7 @@ func TestDropWhile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			it := iter.FromSlice(tt.input)
-			result := iter.Slice(iter.DropWhile(tt.pred, it))
+			result := iter.Slice(iter.DropWhile(it, tt.pred))
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("Expected %v, got %v", tt.expected, result)
 			}
@@ -115,7 +115,7 @@ func TestFilterFalse(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			it := iter.FromSlice(tt.input)
-			result := iter.Slice(iter.FilterFalse(tt.pred, it))
+			result := iter.Slice(iter.FilterFalse(it, tt.pred))
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("Expected %v, got %v", tt.expected, result)
 			}
@@ -138,9 +138,32 @@ func TestTakeWhile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			it := iter.FromSlice(tt.input)
-			result := iter.Slice(iter.TakeWhile(tt.pred, it))
+			result := iter.Slice(iter.TakeWhile(it, tt.pred))
 			if !reflect.DeepEqual(result, tt.expected) {
 				t.Errorf("Expected %v, got %v", tt.expected, result)
+			}
+		})
+	}
+}
+
+func TestForEach(t *testing.T) {
+	tests := []struct {
+		name  string
+		input []int
+	}{
+		{"ForEach through [1, 2, 3, 4, 5]", []int{1, 2, 3, 4, 5}},
+		{"ForEach from empty slice", []int{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			it := iter.FromSlice(tt.input)
+			result := []int{}
+			iter.ForEach(it, func(n int) {
+				result = append(result, n)
+			})
+			if !reflect.DeepEqual(result, tt.input) {
+				t.Errorf("Expected %v, got %v", tt.input, result)
 			}
 		})
 	}

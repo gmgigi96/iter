@@ -24,10 +24,10 @@ func FromMap[K comparable, V any](m map[K]V) Iter[MapEntry[K, V]] {
 
 // Keys returns an iterator for the keys of the map.
 func Keys[K comparable, V any](m map[K]V) Iter[K] {
-	return Map(func(e MapEntry[K, V]) K { return e.Key }, FromMap(m))
+	return Map(FromMap(m), func(e MapEntry[K, V]) K { return e.Key })
 }
 
 // Values returns an iterator for the values of the map.
 func Values[K comparable, V any](m map[K]V) Iter[V] {
-	return Map(func(e MapEntry[K, V]) V { return e.Value }, FromMap(m))
+	return Map(FromMap(m), func(e MapEntry[K, V]) V { return e.Value })
 }

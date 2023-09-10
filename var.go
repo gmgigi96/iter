@@ -55,7 +55,7 @@ func Chain[E any](it ...Iter[E]) Iter[E] {
 }
 
 // DropWhile drops elements from the iterator while the provided function returns true.
-func DropWhile[E any](pred func(E) bool, it Iter[E]) Iter[E] {
+func DropWhile[E any](it Iter[E], pred func(E) bool) Iter[E] {
 	var droppedAll bool
 	return IterFunc[E](func() (E, bool) {
 		for {
@@ -75,7 +75,7 @@ func DropWhile[E any](pred func(E) bool, it Iter[E]) Iter[E] {
 }
 
 // FilterFalse filters out the elements for which the provided function returns true.
-func FilterFalse[E any](pred func(E) bool, it Iter[E]) Iter[E] {
+func FilterFalse[E any](it Iter[E], pred func(E) bool) Iter[E] {
 	return IterFunc[E](func() (E, bool) {
 		for {
 			e, ok := it.Next()
@@ -90,7 +90,7 @@ func FilterFalse[E any](pred func(E) bool, it Iter[E]) Iter[E] {
 }
 
 // TakeWhile takes elements from the iterator while the provided function returns true.
-func TakeWhile[E any](pred func(E) bool, it Iter[E]) Iter[E] {
+func TakeWhile[E any](it Iter[E], pred func(E) bool) Iter[E] {
 	var taken bool
 	return IterFunc[E](func() (E, bool) {
 		if taken {
@@ -106,4 +106,16 @@ func TakeWhile[E any](pred func(E) bool, it Iter[E]) Iter[E] {
 		taken = true
 		return zero[E](), false
 	})
+}
+
+// ForEach iterates through the iterator calling
+// for each value the function f.
+func ForEach[E any](it Iter[E], f func(E)) {
+	for {
+		e, ok := it.Next()
+		if !ok {
+			return
+		}
+		f(e)
+	}
 }

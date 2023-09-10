@@ -8,7 +8,7 @@ func (f IterFunc[E]) Next() (E, bool) {
 }
 
 // Filter filters the elements of the iterator based on the provided function.
-func Filter[E any](f func(E) bool, it Iter[E]) Iter[E] {
+func Filter[E any](it Iter[E], f func(E) bool) Iter[E] {
 	return IterFunc[E](func() (E, bool) {
 		for {
 			e, ok := it.Next()
@@ -23,7 +23,7 @@ func Filter[E any](f func(E) bool, it Iter[E]) Iter[E] {
 }
 
 // Map maps the elements of the iterator to another type based on the provided function.
-func Map[E, T any](f func(E) T, it Iter[E]) Iter[T] {
+func Map[E, T any](it Iter[E], f func(E) T) Iter[T] {
 	return IterFunc[T](func() (T, bool) {
 		e, ok := it.Next()
 		if !ok {
